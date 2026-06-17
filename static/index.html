@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+      <link rel="stylesheet" href="index.css">
+      <div id="particles-js"></div>
+      <link rel="prefetch" href="/scram/scramjet.worker.js" />
+      <link rel="prefetch" href="/scram/scramjet.shared.js" />
+      <script src="/scram/scramjet.controller.js"></script>
+      <script src="/stuff.js"></script>
+      <script src="../particles.json"></script>
+      <script src="js/app.js"></script>
+      <script src="/scram/scramjet.all.js" defer></script>
+      <style>
+               .title {
+            font-size: 2rem;
+            text-shadow: 0 0 15px #a020f0;
+        }
+
+              .typewrite {
+            color: #ff00ff;
+            text-shadow: 0 0 15px #ff00ff;
+        }
+   </style>
+   </head>
+   <body>
+      <div id="header">
+         <img src="logo.gif" alt="logo">
+         <title>gdg beta</title>
+      </div>
+<div class="title">
+        <span style="cursor: text">
+            <span class="typewrite" data-period="2000" data-type='["Gdg.","No school.","clean", "fast asf", "privacy."]'>
+            </span>
+        </span>
+    </div>
+         <form id="form">
+           <input id="input" placeholder="Search the Web Freely..." />
+         </form>
+         <div class="desc left-margin">
+           <p id="sj-error"></p>
+           <pre id="sj-error-code"></pre>
+         </div>
+   
+
+<!-- scramjet yay -->
+<script src="/static/scram/scramjet.all.js"></script>
+<script src="/static/scram/scramjet.client.js"></script>
+<script src="/static/scram/scramjet.controller.js"></script>
+<script src="/static/scram/scramjet.shared.js"></script>
+<script src="/static/scram/scramjet.sync.js"></script>
+<script src="/static/scram/scramjet.worker.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/static/scram/scramjet.sw.js');
+}
+</script>
+
+</body>
+</html>
