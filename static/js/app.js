@@ -1,133 +1,160 @@
-/* -----------------------------------------------
-/* How to use? : Check the GitHub README
-/* ----------------------------------------------- */
+/**
+ * Green Dog Group V2 - Main Application
+ * Modern ES6+ implementation
+ */
 
-/* To load a config file (particles.json) you need to host this demo (MAMP/WAMP/local)... */
-/*
-particlesJS.load('particles-js', 'particles.json', function() {
-  console.log('particles.js loaded - callback');
-});
-*/
+'use strict';
 
-/* Otherwise just put the config content (json): */
+const App = (() => {
+  // DOM Elements
+  const searchForm = document.getElementById('search-form');
+  const searchInput = document.getElementById('search-input');
+  const errorDisplay = document.getElementById('error-display');
+  const errorMessage = document.getElementById('error-message');
+  const errorCode = document.getElementById('error-code');
 
-particlesJS('particles-js',
-  
-  {
-    "particles": {
-      "number": {
-        "value": 80,
-        "density": {
-          "enable": true,
-          "value_area": 800
-        }
-      },
-      "color": {
-        "value": "#ffffff"
-      },
-      "shape": {
-        "type": "circle",
-        "stroke": {
-          "width": 0,
-          "color": "#000000"
-        },
-        "polygon": {
-          "nb_sides": 5
-        },
-        "image": {
-          "src": "img/github.svg",
-          "width": 100,
-          "height": 100
-        }
-      },
-      "opacity": {
-        "value": 0.5,
-        "random": false,
-        "anim": {
-          "enable": false,
-          "speed": 1,
-          "opacity_min": 0.1,
-          "sync": false
-        }
-      },
-      "size": {
-        "value": 5,
-        "random": true,
-        "anim": {
-          "enable": false,
-          "speed": 40,
-          "size_min": 0.1,
-          "sync": false
-        }
-      },
-      "line_linked": {
-        "enable": true,
-        "distance": 150,
-        "color": "#ffffff",
-        "opacity": 0.4,
-        "width": 1
-      },
-      "move": {
-        "enable": true,
-        "speed": 6,
-        "direction": "none",
-        "random": false,
-        "straight": false,
-        "out_mode": "out",
-        "attract": {
-          "enable": false,
-          "rotateX": 600,
-          "rotateY": 1200
-        }
-      }
-    },
-    "interactivity": {
-      "detect_on": "canvas",
-      "events": {
-        "onhover": {
-          "enable": true,
-          "mode": "repulse"
-        },
-        "onclick": {
-          "enable": true,
-          "mode": "push"
-        },
-        "resize": true
-      },
-      "modes": {
-        "grab": {
-          "distance": 400,
-          "line_linked": {
-            "opacity": 1
-          }
-        },
-        "bubble": {
-          "distance": 400,
-          "size": 40,
-          "duration": 2,
-          "opacity": 8,
-          "speed": 3
-        },
-        "repulse": {
-          "distance": 200
-        },
-        "push": {
-          "particles_nb": 4
-        },
-        "remove": {
-          "particles_nb": 2
-        }
-      }
-    },
-    "retina_detect": true,
-    "config_demo": {
-      "hide_card": false,
-      "background_color": "#b61924",
-      "background_image": "",
-      "background_position": "50% 50%",
-      "background_repeat": "no-repeat",
-      "background_size": "cover"
+  /**
+   * Initialize application
+   */
+  const init = () => {
+    setupEventListeners();
+    console.log('✨ Green Dog Group V2 initialized');
+  };
+
+  /**
+   * Setup event listeners
+   */
+  const setupEventListeners = () => {
+    if (searchForm) {
+      searchForm.addEventListener('submit', handleSearch);
     }
-  }
 
-);
+    // Keyboard shortcuts
+    document.addEventListener('keydown', handleKeyboard);
+  };
+
+  /**
+   * Handle search submission
+   */
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const query = searchInput.value.trim();
+
+    if (!query) {
+      showError('Please enter a search query');
+      return;
+    }
+
+    clearError();
+    performSearch(query);
+  };
+
+  /**
+   * Perform the actual search
+   */
+  const performSearch = async (query) => {
+    try {
+      // URL encode the search query
+      const encodedQuery = encodeURIComponent(query);
+
+      // Check if we have the Scramjet search engine available
+      if (window.SearchAPI && typeof window.SearchAPI.search === 'function') {
+        const results = await window.SearchAPI.search(encodedQuery);
+        handleSearchResults(results);
+      } else {
+        // Fallback: use a privacy-focused search engine
+        const searchUrl = `https://duckduckgo.com/?q=${encodedQuery}`;
+        window.location.href = searchUrl;
+      }
+    } catch (error) {
+      handleSearchError(error);
+    }
+  };
+
+  /**
+   * Handle search results
+   */
+  const handleSearchResults = (results) => {
+    console.log('Search results:', results);
+    // Handle results based on your search engine implementation
+  };
+
+  /**
+   * Handle search errors
+   */
+  const handleSearchError = (error) => {
+    console.error('Search error:', error);
+    showError(
+      'An error occurred during search',
+      error.message || JSON.stringify(error)
+    );
+  };
+
+  /**
+   * Handle keyboard shortcuts
+   */
+  const handleKeyboard = (event) => {
+    // Focus search input on '/' key
+    if (event.key === '/' && document.activeElement !== searchInput) {
+      event.preventDefault();
+      searchInput.focus();
+    }
+
+    // Clear search on 'Escape'
+    if (event.key === 'Escape') {
+      searchInput.value = '';
+      clearError();
+    }
+  };
+
+  /**
+   * Show error message
+   */
+  const showError = (message, details = '') => {
+    if (errorDisplay) {
+      errorMessage.textContent = message;
+      if (details) {
+        errorCode.textContent = details;
+      }
+      errorDisplay.classList.add('show');
+    }
+  };
+
+  /**
+   * Clear error message
+   */
+  const clearError = () => {
+    if (errorDisplay) {
+      errorDisplay.classList.remove('show');
+      errorMessage.textContent = '';
+      errorCode.textContent = '';
+    }
+  };
+
+  /**
+   * Get version
+   */
+  const getVersion = () => {
+    return '2.0.0';
+  };
+
+  // Public API
+  return {
+    init,
+    getVersion,
+    showError,
+    clearError
+  };
+})();
+
+// Initialize app when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', App.init);
+} else {
+  App.init();
+}
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = App;
+}
